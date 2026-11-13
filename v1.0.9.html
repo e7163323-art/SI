@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תוכנת אוטובוסים – גרסה</title>
+<style>
+
+:root{
+  --bg:#f6f7fb; --card:#ffffff; --ink:#152033; --dim:#5c6b82; --line:#e3e7ee;
+  --accent:#ea580c; --accent-ink:#ffffff; --violet:#7c4dff; --ok:#1f9d55; --chip:#eef1f8;
+  --shadow:0 6px 24px rgba(21,32,51,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#0f1424; --card:#1a2138; --ink:#eef1fb; --dim:#9aa7c7; --line:#2b3556; --chip:#232c4a; --shadow:0 6px 24px rgba(0,0,0,.35); }
+}
+:root[data-theme="dark"]{ --bg:#0f1424; --card:#1a2138; --ink:#eef1fb; --dim:#9aa7c7; --line:#2b3556; --chip:#232c4a; --shadow:0 6px 24px rgba(0,0,0,.35); }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",Arial,"Noto Sans Hebrew",sans-serif}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:14px;height:58px}
+.brand{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px;text-decoration:none}
+.brand i{font-style:normal;background:var(--accent);color:#fff;border-radius:9px;padding:2px 8px}
+nav.menu{display:flex;gap:4px;margin-inline-start:auto;overflow-x:auto;scrollbar-width:none}
+nav.menu a{padding:7px 12px;border-radius:10px;text-decoration:none;color:var(--dim);font-weight:600;font-size:14px;white-space:nowrap}
+nav.menu a:hover{background:var(--chip);color:var(--ink)}
+#theme{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:15px}
+.hero{padding:56px 0 34px;text-align:center}
+.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.15;margin:0 0 12px;letter-spacing:-.02em}
+.hero h1 span{color:var(--accent)}
+.hero p.lead{max-width:640px;margin:0 auto 22px;color:var(--dim);font-size:18px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 24px}
+.badge{background:var(--chip);border-radius:999px;padding:5px 13px;font-size:13.5px;font-weight:600}
+.cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:14px;padding:13px 22px;font:700 16px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 22px rgba(234,88,12,.35)}
+.btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.btn small{font-weight:500;opacity:.85}
+.note{margin:14px auto 0;max-width:560px;color:var(--dim);font-size:13.5px}
+section{padding:42px 0;scroll-margin-top:70px}
+section h2{font-size:28px;margin:0 0 6px}
+section p.sub{color:var(--dim);margin:0 0 22px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 6px;font-size:17px}
+.card p{margin:0;color:var(--dim);font-size:14.5px}
+.ic{font-size:28px;display:block;margin-bottom:6px}
+.ver{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:12px;overflow:hidden}
+.ver summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:16px 18px;font-weight:700}
+.ver summary::-webkit-details-marker{display:none}
+.ver summary .v{font-size:19px}
+.ver summary .d{color:var(--dim);font-weight:500;font-size:13.5px;margin-inline-start:auto}
+.ver summary .tag{background:var(--ok);color:#fff;border-radius:8px;padding:1px 9px;font-size:12px}
+.ver .body{padding:0 18px 18px;border-top:1px solid var(--line)}
+.ver ul{margin:14px 0;padding-inline-start:20px;color:var(--dim)}
+.ver ul li{margin:3px 0}
+.files{display:grid;gap:8px}
+.file{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--chip);border-radius:12px;padding:10px 12px}
+.file b{min-width:150px}.file .sz{color:var(--dim);font-size:13px}
+.file a.dl{margin-inline-start:auto;background:var(--accent);color:#fff;text-decoration:none;border-radius:10px;padding:6px 14px;font-weight:700;font-size:14px}
+.file code{display:block;width:100%;direction:ltr;text-align:left;font-size:11.5px;color:var(--dim);word-break:break-all}
+.steps{counter-reset:s;display:grid;gap:10px}
+.steps li{list-style:none;counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 16px;display:flex;gap:12px;align-items:flex-start}
+.steps li::before{content:counter(s);background:var(--violet);color:#fff;border-radius:50%;min-width:28px;height:28px;display:grid;place-items:center;font-weight:800}
+.steps{padding:0;margin:0}
+.pro{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(239,68,68,.10));border:1px solid rgba(245,158,11,.5);border-radius:22px;padding:24px}
+.pro h2{display:flex;align-items:center;gap:10px}
+.pro .pb{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border-radius:9px;padding:1px 10px;font-size:15px}
+.cols{display:grid;gap:8px 24px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:14px 0 0;padding:0;list-style:none}
+.cols li::before{content:"✓ ";color:var(--ok);font-weight:800}
+details.faq{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:8px}
+details.faq summary{cursor:pointer;font-weight:700}
+details.faq p{margin:8px 0 0;color:var(--dim)}
+footer{padding:30px 0 50px;color:var(--dim);font-size:14px;text-align:center;border-top:1px solid var(--line);margin-top:30px}
+@media (max-width:640px){ .hero{padding-top:34px} .file b{min-width:0} .ver summary .d{display:none} }
+
+/* ================= color pass ================= */
+:root{--g1:#ff7a18;--g2:#ff3d6e;--g3:#7c4dff;--g4:#14b8a6;--g5:#3b82f6;--g6:#f59e0b;--g7:#22c55e;--g8:#ec4899}
+body{background:
+  radial-gradient(900px 520px at 88% -80px,color-mix(in srgb,var(--g3) 22%,transparent),transparent 70%),
+  radial-gradient(800px 480px at 8% 60px,color-mix(in srgb,var(--g1) 20%,transparent),transparent 70%),
+  radial-gradient(700px 500px at 60% 520px,color-mix(in srgb,var(--g4) 14%,transparent),transparent 70%),
+  var(--bg);background-attachment:fixed}
+header.top{border-bottom:0;box-shadow:0 2px 0 0 transparent;border-image:linear-gradient(90deg,var(--g1),var(--g2),var(--g3),var(--g4)) 1;border-bottom:3px solid}
+.brand i{background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 4px 14px rgba(255,61,110,.35)}
+nav.menu a:hover{background:linear-gradient(135deg,color-mix(in srgb,var(--g1) 18%,transparent),color-mix(in srgb,var(--g3) 18%,transparent));color:var(--ink)}
+.hero h1{font-weight:900}
+.hero h1 span{background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.hero p.lead{color:var(--ink);opacity:.82}
+.badge{color:#fff;border:0;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.badge:nth-child(1){background:linear-gradient(135deg,var(--g1),var(--g2))}
+.badge:nth-child(2){background:linear-gradient(135deg,var(--g4),var(--g5))}
+.badge:nth-child(3){background:linear-gradient(135deg,var(--g3),var(--g8))}
+.badge:nth-child(4){background:linear-gradient(135deg,var(--g6),var(--g1))}
+.btn.primary,.file a.dl,.go{background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 8px 22px rgba(255,61,110,.35);transition:transform .15s,box-shadow .15s}
+.btn.primary:hover,.file a.dl:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,61,110,.45)}
+.btn.ghost{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--g3),var(--g4)) border-box}
+.btn.ghost:hover{transform:translateY(-2px)}
+section h2{display:inline-block;position:relative;padding-bottom:8px}
+section h2::after{content:"";position:absolute;inset-inline-start:0;bottom:0;width:56%;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3))}
+.card{--cc:var(--g1);border:0;border-top:5px solid var(--cc);position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,color-mix(in srgb,var(--cc) 13%,transparent),transparent 55%);pointer-events:none}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 34px color-mix(in srgb,var(--cc) 30%,transparent)}
+.grid .card:nth-child(8n+1){--cc:var(--g1)}.grid .card:nth-child(8n+2){--cc:var(--g5)}.grid .card:nth-child(8n+3){--cc:var(--g4)}.grid .card:nth-child(8n+4){--cc:var(--g3)}
+.grid .card:nth-child(8n+5){--cc:var(--g8)}.grid .card:nth-child(8n+6){--cc:var(--g6)}.grid .card:nth-child(8n+7){--cc:var(--g7)}.grid .card:nth-child(8n+8){--cc:var(--g2)}
+.ic{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;font-size:28px;background:color-mix(in srgb,var(--cc) 20%,transparent);margin-bottom:10px}
+.card h3{color:var(--ink)}
+.ver{border:0;border-inline-start:6px solid var(--g5);box-shadow:var(--shadow)}
+.ver:nth-of-type(5n+1){border-inline-start-color:var(--g1)}.ver:nth-of-type(5n+2){border-inline-start-color:var(--g3)}.ver:nth-of-type(5n+3){border-inline-start-color:var(--g4)}.ver:nth-of-type(5n+4){border-inline-start-color:var(--g8)}.ver:nth-of-type(5n+5){border-inline-start-color:var(--g6)}
+.ver summary .v{background:linear-gradient(90deg,var(--g1),var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:900}
+.ver summary .tag{background:linear-gradient(135deg,var(--g7),var(--g4))}
+.file{border-inline-start:5px solid var(--g5);background:color-mix(in srgb,var(--g5) 9%,var(--card))}
+.file:nth-child(3n+1){border-inline-start-color:var(--g1);background:color-mix(in srgb,var(--g1) 9%,var(--card))}
+.file:nth-child(3n+2){border-inline-start-color:var(--g4);background:color-mix(in srgb,var(--g4) 9%,var(--card))}
+.file:nth-child(3n+3){border-inline-start-color:var(--g3);background:color-mix(in srgb,var(--g3) 9%,var(--card))}
+.steps li{border:0;box-shadow:var(--shadow)}
+.steps li::before{background:linear-gradient(135deg,var(--g3),var(--g8));box-shadow:0 4px 12px rgba(124,77,255,.4)}
+.pro{background:linear-gradient(135deg,rgba(245,158,11,.22),rgba(255,61,110,.18),rgba(124,77,255,.16));border:2px solid transparent;background-clip:padding-box;position:relative}
+.pro::before{content:"";position:absolute;inset:-2px;z-index:-1;border-radius:24px;background:linear-gradient(135deg,var(--g6),var(--g2),var(--g3))}
+details.faq{border:0;border-inline-start:5px solid var(--g4);box-shadow:var(--shadow)}
+details.faq:nth-of-type(2n){border-inline-start-color:var(--g8)}details.faq:nth-of-type(3n){border-inline-start-color:var(--g6)}
+footer{border-top:0;position:relative}
+footer::before{content:"";position:absolute;inset-inline:0;top:0;height:4px;background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3),var(--g4),var(--g7))}
+.nav2 a{background:color-mix(in srgb,var(--g3) 14%,var(--card))}.nav2 a.on{background:linear-gradient(135deg,var(--g1),var(--g2))}
+.back{background:linear-gradient(135deg,color-mix(in srgb,var(--g5) 18%,transparent),color-mix(in srgb,var(--g4) 18%,transparent))}
+@media (prefers-reduced-motion: reduce){ .card,.btn,.file a.dl{transition:none} }
+.vp{padding:34px 0 10px}
+.vp h1{font-size:clamp(26px,5vw,40px);margin:6px 0 4px}
+.vp .meta{color:var(--dim);margin:0 0 18px}
+.back{display:inline-flex;gap:6px;text-decoration:none;color:var(--dim);font-weight:600;padding:6px 12px;border-radius:10px;background:var(--chip)}
+.nav2{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.nav2 a{padding:6px 14px;border-radius:999px;background:var(--chip);text-decoration:none;font-weight:600;font-size:14px}
+.nav2 a.on{background:var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html"><i>🚌</i> תוכנת אוטובוסים</a>
+  <nav class="menu"><a href="index.html#download">הורדה</a><a href="index.html#versions">כל הגרסאות</a><a href="index.html#ai">קו-AI</a><a href="index.html#install">התקנה</a></nav>
+  <button id="theme" type="button" title="מצב תצוגה" aria-label="מצב תצוגה">🌓</button>
+</div></header>
+<main class="wrap vp">
+  <a class="back" href="index.html#versions">→ כל הגרסאות</a>
+  <h1 id="vt"></h1>
+  <p class="meta" id="vm"></p>
+  <section style="padding-top:8px"><h2>מה חדש</h2><ul id="vb" style="color:var(--dim);padding-inline-start:20px"></ul></section>
+  <section style="padding-top:8px"><h2>הורדה</h2><div class="files" id="vf"></div></section>
+  <section id="vaiS" style="padding-top:8px;display:none"><h2>קו-AI – העוזר החכם (תוסף)</h2><p class="meta" id="vaiN"></p><div class="files" id="vai"></div></section>
+  <section style="padding-top:8px"><h2>גרסאות אחרות</h2><div class="nav2" id="vn"></div></section>
+</main>
+<footer><div class="wrap"><div id="foot"></div><div style="margin-top:6px">התוכנה ניתנת כפי שהיא (AS IS).</div></div></footer>
+<script>
+var DATA = {"updated":"09/11/2026","contact":"058-3283388","gtfs":"07/10/2026","stats":["35,094 תחנות · 7,698 קווים","עובד בלי אינטרנט","21,631 אריחי לוויין","עברית מלאה"],"versions":[{"v":"1.0.9","date":"08/11/2026","title":"לוח יציאות, נגישות ותזכורות","bullets":["לוח יציאות גדול לתחנה: שעון חי, ספירה לאחור, הקראה וצליל כשהאוטובוס מגיע","מקומות אחרונים בתכנון מסלול, וקיצורי מקלדת Alt+1 עד Alt+9","תפריט נגישות: ניגודיות גבוהה, טקסט וכפתורים גדולים, גופן קריא ומצב בלי אנימציות","קו-AI: \"מתי לצאת כדי להגיע עד 9:00\", יציאה בשעה מסוימת, ראשון ואחרון של קו, ימי פעילות, תדירות, מי מפעיל, אילו קווים עוברים בתחנה","תזכורות (כולל יומיות), \"תכנן את הדרך חזרה\", העתקה ושיתוף של המסלול"],"files":[{"type":"pc","label":"מתקין Windows (תוכנה + לוח זמנים + מפות)","asset":"Otobusim-Setup-1.0.9.exe","size":279505287,"sha":"bda14082c2988b584ac36c782d3f59d964af322939d162cb4a002fe079c033ba","url":"https://drive.google.com/file/d/1oBgAaSMqHAXp2pXe5qouDCFPNjB8F5Ly/view?usp=drivesdk","inFolder":false},{"type":"apk","label":"אפליקציה לאנדרואיד (APK)","asset":"Otobusim-1.0.9.apk","size":260658205,"sha":"6fb5774eb331822b0d741d183a9a0c6e407a2f3cdbbecb135c4aa203bcd9daba","url":"https://drive.google.com/file/d/1lSkactZbJBUqFn2_0hPSHi05e1bWal6_/view?usp=drivesdk","inFolder":false}]},{"v":"1.0.8","date":"30/10/2026","title":"בועת תחנה ועוד","bullets":["לחיצה ארוכה על תחנה במפה: היציאות הקרובות, שמירה, הקראה ושיתוף","\"מה יוצא עכשיו\" לכל תחנה שמורה, ושיתוף תחנה","קו-AI: תחנה לפי שם, קו לפי כיוון, \"פספסתי\", הרגלי נסיעה, צילום שלט ללא אינטרנט","לחיצה ארוכה על מקום ריק במפה: תכנון \"מכאן\" או \"לכאן\""],"files":[{"type":"pc","label":"מתקין Windows (תוכנה + לוח זמנים + מפות)","asset":"Otobusim-Setup-1.0.8.exe","size":279490159,"sha":"ce9d8b546a4244dc8e5a2742fa217e286be48a720b921053a103fcc99ef3962e","url":"https://drive.google.com/file/d/1sQrKoAlIWttwAMnfjpRfEdtG6-Y5qj--/view?usp=drivesdk","inFolder":false},{"type":"apk","label":"אפליקציה לאנדרואיד (APK)","asset":"Otobusim-1.0.8.apk","size":260645917,"sha":"b9add289eb34aafd6d4b1372fc69e8fd773bc955d71a03776cb8976a71db3c1b","url":"https://drive.google.com/file/d/1SVTZ8b5J8Ix8GmzBbEUUNlaEkA5QxmaZ/view?usp=drivesdk","inFolder":false}]},{"v":"1.0.7","date":"28/10/2026","title":"קו-AI עובד עם העכבר, קולות והגדרות","bullets":["קו-AI מפעיל את התוכנה בעכבר מדומה, תמיד אחרי אישור שלך","קולות טבעיים והקראה של תשובות","מסך ⚙️ הגדרות, מיון מסלולים, וסיור ראשוני בתוכנה"],"files":[{"type":"pc","label":"מתקין Windows (תוכנה + לוח זמנים + מפות)","asset":"Otobusim-Setup-1.0.7.exe","size":279457626,"sha":"a82a4bc0788a816dcc2a654d81bee7ed727f2173927f2fa9bede8a3ecf4f310a","url":"https://drive.google.com/file/d/14N91b-F0pQ-_N9hmDGPmXo95k5P_KEyh/view?usp=drivesdk","inFolder":false},{"type":"apk","label":"אפליקציה לאנדרואיד (APK)","asset":"Otobusim-1.0.7.apk","size":260629533,"sha":"32b74fa85c68c1ff17aaf3660a2630638ccb6bccc1040f1b7fa95447487a1f5e","url":"https://drive.google.com/file/d/1SgA_EfiiJiiguOhM6dyACNpdiZv7ORaa/view?usp=drivesdk","inFolder":false}]},{"v":"1.0.6","date":"27/10/2026","title":"מעקב נסיעה, אחרון הביתה ודלת לדלת","bullets":["מעקב נסיעה חי תחנה אחר תחנה, עם התראות","כפתור \"אחרון הביתה\" עם ספירה לאחור","דלת לדלת: הליכה מפורטת ושמות רחובות על המפה"],"files":[{"type":"pc","label":"מתקין Windows (תוכנה + לוח זמנים + מפות)","asset":"Otobusim-Setup-1.0.6.exe","size":271118601,"sha":"3dd49a7e32f12f24a73f8d8406cca1d6af01f35246408d4e450c1e227db1cbce","url":"https://drive.google.com/file/d/104GOEJ9NjdfryoqiyCvnRH3WugUNZwWR/view?usp=drivesdk","inFolder":false},{"type":"apk","label":"אפליקציה לאנדרואיד (APK)","asset":"Otobusim-1.0.6.apk","size":257860637,"sha":"510c445eb2724d60b50b790fca5aa47f13948dde1eddae7a28be41025e24ec62","url":"https://drive.google.com/file/d/1h5YnwNhEQcOVdWIevBULmzbzN8ElhvD4/view?usp=drivesdk","inFolder":false}]},{"v":"1.0.5","date":"10/10/2026","title":"לוח זמנים ומפות לוויין","bullets":["לוח הזמנים של משרד התחבורה מ-07/10/2026: 35,094 תחנות ו-7,698 קווים","צילומי לוויין של כל הארץ מותקנים עם התוכנה"],"files":[{"type":"pc","label":"מתקין Windows (תוכנה + לוח זמנים + מפות)","asset":"Otobusim-Setup-1.0.5.exe","size":269419458,"sha":"0db28d3287a5018ec89f07532d16a2be23ee46c30c025fa94536acfebea03f06","url":"https://drive.google.com/file/d/1p8tnoBPHmGHnk8coKRwunwYRD7y9skgs/view?usp=drivesdk","inFolder":false}]}],"ai":{"cards":[["🧠","מבין עברית","מתכנן מסלולים, פותח מסכים, עונה על שאלות על קווים ותחנות, מתוך לוח הזמנים עצמו."],["🔒","פרטי ומקומי","המודל רץ במחשב שלך. שום שאלה לא יוצאת החוצה, ואין צורך בחשבון."],["🖱️","עם אישור שלך","לפני כל לחיצה או הקלדה של ה-AI מופיעה בקשה לאישור."],["📷","צילום שלט","מצלמים תחנה או קו, והמספר נקרא בלי אינטרנט."]],"note":"המתקין הבסיסי (4 MB) מתקין את קו-AI בתוך התוכנה: פקודות, הרגלי נסיעה ומודל קטן מקומי. מריצים אותו אחרי התקנת התוכנה הראשית. החבילה הגדולה יותר (עם מודל שפה גדול וקול) לא מוצעת כרגע להורדה באתר.","files":[{"type":"ai","label":"מתקין קו-AI בסיסי (4 MB) – בלי מודל השפה הגדול","asset":"התקנת-קו-AI.exe","size":4433920,"sha":"919d02a6b6f5d5e320aaa3a11ce57436dce61b20de6364409974373699194885","url":"https://drive.google.com/file/d/1AOpymZpjWRd267k9ybATSnuki3mikc_3/view?usp=drivesdk"}],"v":"1.0.9"},"pro":{"list":["זיכרון קבוע: \"תזכור שאני גר ב…\" ו\"אני עובד ב…\"","קיצורים: \"הביתה\", \"לעבודה\", \"מהבית לעבודה\"","מקומות עם שם: \"מסלול לסבתא\"","מסלולים קבועים לפי יום ושעה, ו\"מה יש לי היום\"","השוואת מסלולים אמיתית עם המלצה","העדפות אישיות (הליכה מקסימלית, בלי החלפות)","תוכנית יומית","בורר מודלים מתחת לצ\u0027אט","תשובות מנתוני אמת של לוח הזמנים"]}}, VER = "1.0.9";
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  function mb(n){ return n >= 1024 * 1024 * 1000 ? (n / 1073741824).toFixed(2) + " GB" : (n / 1048576).toFixed(1) + " MB"; }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var v = DATA.versions.filter(function(x){ return x.v === VER; })[0] || DATA.versions[0];
+  document.title = "תוכנת אוטובוסים " + v.v;
+  $("vt").textContent = "גרסה " + v.v + " – " + v.title;
+  $("vm").textContent = "תאריך: " + v.date + (v.v === DATA.versions[0].v ? " · הגרסה העדכנית" : "");
+  $("vb").innerHTML = v.bullets.map(function(b){ return "<li>" + esc(b) + "</li>"; }).join("");
+  $("vf").innerHTML = v.files.length ? v.files.map(function(f){
+    return '<div class="file"><b>' + esc(f.label) + '</b><span class="sz">' + mb(f.size) + '</span>' +
+      '<a class="dl" href="' + esc(f.url) + '" rel="noopener" target="_blank">⬇ ' + (f.inFolder ? "פתח בדרייב" : "הורדה מ-Google Drive") + '</a>' +
+      (f.inFolder ? '<span style="width:100%;color:var(--dim);font-size:12.5px">בתיקייה בדרייב מחפשים את הקובץ: <b dir="ltr">' + esc(f.asset) + '</b></span>' : "") +
+      (f.size > 100 * 1048576 ? '<span style="width:100%;color:var(--dim);font-size:12.5px">לקבצים גדולים גוגל מציגה "לא ניתן לסרוק לווירוסים": לוחצים "הורד בכל זאת".</span>' : "") +
+      '<code title="SHA256">SHA256: ' + esc(f.sha) + '</code></div>';
+  }).join("") : '<p style="color:var(--dim)">אין קישורי הורדה לגרסה הזאת. לקבלתה: ' + esc(DATA.contact) + '.</p>';
+  if (v.v === DATA.versions[0].v && DATA.ai && DATA.ai.files && DATA.ai.files.length) {
+    $("vaiS").style.display = ""; $("vaiN").textContent = DATA.ai.note;
+    $("vai").innerHTML = DATA.ai.files.map(function(f){
+      return '<div class="file"><b>' + esc(f.label) + '</b><span class="sz">' + mb(f.size) + '</span><a class="dl" href="' + esc(f.url) + '" rel="noopener" target="_blank">⬇ הורדה מ-Google Drive</a>' +
+        '<span style="width:100%;color:var(--dim);font-size:12.5px">לקבצים גדולים גוגל מציגה "לא ניתן לסרוק לווירוסים": לוחצים "הורד בכל זאת".</span><code title="SHA256">SHA256: ' + esc(f.sha) + '</code></div>';
+    }).join("");
+  }
+  $("vn").innerHTML = DATA.versions.map(function(x){ return '<a href="v' + esc(x.v) + '.html"' + (x.v === v.v ? ' class="on"' : "") + '>' + esc(x.v) + '</a>'; }).join("");
+  $("foot").textContent = "תוכנת אוטובוסים · יוצר התוכנה: " + DATA.contact + " · האתר עודכן " + DATA.updated;
+  var root = document.documentElement, saved = null; try { saved = localStorage.getItem("theme"); } catch (e) {}
+  if (saved) root.setAttribute("data-theme", saved);
+  $("theme").onclick = function(){
+    var dark = root.getAttribute("data-theme") ? root.getAttribute("data-theme") === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var nx = dark ? "light" : "dark"; root.setAttribute("data-theme", nx); try { localStorage.setItem("theme", nx); } catch (e) {}
+  };
+})();
+</script>
+</body>
+</html>
