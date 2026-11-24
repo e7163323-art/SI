@@ -1,3 +1,5 @@
+692fd2489b1190bbc2f2a4682babf6cce94ea08f240d2ff05cb4cf6b0014607a  Otobusim-1.1.0.apk
+9ff0d1f64d50167fa9a4f49f8d4526b44b0be059eff0cd3e75fcf54ce1fe10b2  Otobusim-Setup-1.1.0.exe
 bda14082c2988b584ac36c782d3f59d964af322939d162cb4a002fe079c033ba  Otobusim-Setup-1.0.9.exe
 6fb5774eb331822b0d741d183a9a0c6e407a2f3cdbbecb135c4aa203bcd9daba  Otobusim-1.0.9.apk
 ce9d8b546a4244dc8e5a2742fa217e286be48a720b921053a103fcc99ef3962e  Otobusim-Setup-1.0.8.exe
